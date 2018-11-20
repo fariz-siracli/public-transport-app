@@ -1,0 +1,50 @@
+package com.fs.mobile.tansportcatalog.utils
+
+import android.app.Activity
+import java.io.*
+
+class Utils {
+
+    companion object {
+
+        fun copyDataBaseToApp(activity: Activity, dbName: String) {
+            val outFileName = activity.getDatabasePath(dbName).getPath()
+            val dir = File(activity.getDatabasePath(dbName).getParent())
+            dir.mkdir()
+            // Open the empty mainDb as the output stream
+            val outputFile = File(outFileName)
+            try {
+                outputFile.createNewFile()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            var myInput: InputStream? = null
+            var myOutput: OutputStream? = null
+            try {
+                myInput = activity.getAssets().open(dbName)
+                myOutput = FileOutputStream(outputFile)
+                // transfer bytes from the inputfile to the outputfile
+                var buffer = ByteArray(1024)
+                var length =0
+                while (myInput.read(buffer).let { length = it; it > 0 }) {
+                    myOutput.write(buffer, 0, length)
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } finally {
+                try {
+                    myInput!!.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                try {
+                    myOutput!!.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+}

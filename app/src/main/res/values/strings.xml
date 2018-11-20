@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TansportCatalog</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="taxi">Taxi</string>
+    <string name="cargo">Cargo</string>
+    <string name="driver">Driver</string>
+    <string name="rent_car">Rent Car</string>
+
+</resources>
