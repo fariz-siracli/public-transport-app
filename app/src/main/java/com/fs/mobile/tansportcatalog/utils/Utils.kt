@@ -1,6 +1,7 @@
 package com.fs.mobile.tansportcatalog.utils
 
 import android.app.Activity
+import android.content.Context
 import java.io.*
 
 class Utils {
@@ -25,7 +26,7 @@ class Utils {
                 myOutput = FileOutputStream(outputFile)
                 // transfer bytes from the inputfile to the outputfile
                 var buffer = ByteArray(1024)
-                var length =0
+                var length = 0
                 while (myInput.read(buffer).let { length = it; it > 0 }) {
                     myOutput.write(buffer, 0, length)
                 }
@@ -44,6 +45,11 @@ class Utils {
                     e.printStackTrace()
                 }
             }
+        }
+
+        fun checkDatabaseExistence(context: Context, fileName: String): Boolean {
+            var db = context.getDatabasePath(fileName);
+            return db.exists()
         }
     }
 

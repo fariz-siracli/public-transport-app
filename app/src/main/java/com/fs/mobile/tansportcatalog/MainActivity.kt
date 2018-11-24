@@ -1,22 +1,19 @@
 package com.fs.mobile.tansportcatalog
 
-import android.support.design.widget.TabLayout
+import android.content.Context
+import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.*
 import com.fs.mobile.tansportcatalog.utils.Utils
-
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,14 +26,15 @@ class MainActivity : AppCompatActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+    private var context: Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        context = this
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
@@ -46,11 +44,14 @@ class MainActivity : AppCompatActivity() {
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
         val dbName = "pub_tr.db"
-        Utils.copyDataBaseToApp(this,dbName)
+        Utils.copyDataBaseToApp(this, dbName)
+        var existence = Utils.checkDatabaseExistence(this, dbName);
+        Log.i("PUB_TR", "exists = " + existence);
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
 
     }
 
@@ -103,7 +104,13 @@ class MainActivity : AppCompatActivity() {
             savedInstanceState: Bundle?
         ): View? {
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments?.getInt(ARG_SECTION_NUMBER))
+            var revcView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
+            revcView.layoutManager = LinearLayoutManager(context!!)
+            val companies = ArrayList<String>()
+            companies.add("189 Taxi")
+            companies.add("Uber")
+            companies.add("Taxify")
+            revcView.adapter = CompaniesAdapter(companies, context!!)
             return rootView
         }
 
