@@ -18,10 +18,10 @@ data class Company(
     val logo: ByteArray?,
 
     @ColumnInfo(name = "url")
-    val url: String,
+    val url: String?,
 
     @ColumnInfo(name = "rating")
-    val rating: Double,
+    val rating: Double?,
 
     @ColumnInfo(name = "type")
     val type: Int,
@@ -30,10 +30,10 @@ data class Company(
     val sortOrder: Int,
 
     @ColumnInfo(name = "city")
-    val city: Int,
+    val city: Int?,
 
     @ColumnInfo(name = "email")
-    val email: String
+    val email: String?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

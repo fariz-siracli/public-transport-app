@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,6 +20,7 @@ import com.fs.mobile.tansportcatalog.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 
 var database: AppDatabase? = null
+var currentPage = 0
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,6 +51,23 @@ class MainActivity : AppCompatActivity() {
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+        container.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                currentPage = position
+                Utils.log("current = " + position)
+
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+        })
 
 
         Utils.copyDataBaseToApp(this, Constants.DB_NAME)
@@ -98,8 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
+            return 4
         }
     }
 
@@ -109,19 +127,22 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ValidFragment")
     class PlaceholderFragment : Fragment() {
 
+
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
+            savedInstanceState: Bundle?): View? {
+
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
             var revcView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
             revcView.layoutManager = LinearLayoutManager(context!!)
             var companiesAdapter = CompaniesAdapter(listOf(), context!!)
             revcView.adapter = companiesAdapter
+            var page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
-                var companies = database!!.companyDao().getCompanyByType(1)
-                companiesAdapter.items = companies
+                Utils.log("page = " + page)
+                var companies = database!!.companyDao().getCompanyByType(page )
+//                companiesAdapter.items = companies
                 getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
 
             }
@@ -129,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         companion object {
+            var pageNumber = 0
             /**
              * The fragment argument representing the section number for this
              * fragment.
@@ -144,6 +166,7 @@ class MainActivity : AppCompatActivity() {
                 val args = Bundle()
                 args.putInt(ARG_SECTION_NUMBER, sectionNumber)
                 fragment.arguments = args
+                pageNumber = sectionNumber
                 return fragment
             }
         }

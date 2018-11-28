@@ -2,6 +2,7 @@ package com.fs.mobile.tansportcatalog.utils
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import java.io.*
 
 class Utils {
@@ -50,6 +51,10 @@ class Utils {
         fun checkDatabaseExistence(context: Context, fileName: String): Boolean {
             var db = context.getDatabasePath(fileName);
             return db.exists()
+        }
+
+        fun log(text: String) {
+            Log.i("TRANS_CATALOG", text)
         }
     }
 
