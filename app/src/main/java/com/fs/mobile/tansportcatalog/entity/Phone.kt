@@ -4,12 +4,22 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "type")
-data class Type(
+
+@Entity(tableName = "phone")
+data class Phone(
     @PrimaryKey
     @ColumnInfo(name = "_id")
     val id: Int,
 
+    @ColumnInfo(name = "company_id")
+    val companyId : Int,
+
+    @ColumnInfo(name = "phone")
+    val phone: String,
+
     @ColumnInfo(name = "type")
-    val companyId: String
+    val type: Int,
+
+    @ColumnInfo(name = "desc")
+    val description: String
 )

@@ -133,19 +133,20 @@ class MainActivity : AppCompatActivity() {
             savedInstanceState: Bundle?): View? {
 
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            var revcView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
-            revcView.layoutManager = LinearLayoutManager(context!!)
+            var recView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
+            recView.layoutManager = LinearLayoutManager(context!!)
             var companiesAdapter = CompaniesAdapter(listOf(), context!!)
-            revcView.adapter = companiesAdapter
+            recView.adapter = companiesAdapter
             var page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
                 Utils.log("page = " + page)
                 var companies = database!!.companyDao().getCompanyByType(page )
-//                companiesAdapter.items = companies
+                companiesAdapter.items = companies
                 getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
 
             }
+
             return rootView
         }
 

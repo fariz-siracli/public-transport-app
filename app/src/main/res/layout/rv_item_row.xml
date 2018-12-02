@@ -6,7 +6,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/card_view"
         android:layout_margin="5dp"
-        card_view:cardBackgroundColor="#81C784"
         card_view:cardCornerRadius="12dp"
         card_view:cardElevation="3dp"
         card_view:contentPadding="4dp">
@@ -38,11 +37,13 @@
                 android:layout_toRightOf="@+id/iv_profile_image"/>
         <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/btn_call"
-                android:src="@android:drawable/stat_sys_phone_call"
+                android:src="@drawable/ic_baseline_call_24px"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:layout_centerVertical="true"
+                android:background="@drawable/ripple_rect"
                 android:layout_alignParentRight="true"/>
 
 

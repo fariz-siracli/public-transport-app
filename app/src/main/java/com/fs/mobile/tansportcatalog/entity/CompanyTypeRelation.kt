@@ -4,13 +4,13 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 
 
-@Entity(primaryKeys = ["company_id", "type_id"],
+@Entity(tableName = "company_types", primaryKeys = ["company_id", "type_id"],
     foreignKeys = [
         ForeignKey(entity = Company::class,
             parentColumns = ["_id"],
             childColumns = ["company_id"]),
         ForeignKey(entity = Type::class,
-            parentColumns = ["id"],
+            parentColumns = ["_id"],
             childColumns = ["type_id"])
     ])
 data class CompanyTypeRelation(
