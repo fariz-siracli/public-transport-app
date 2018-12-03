@@ -17,9 +17,9 @@ data class Phone(
     @ColumnInfo(name = "phone")
     val phone: String,
 
-    @ColumnInfo(name = "type")
+    @ColumnInfo(name = "phone_type")
     val type: Int,
 
     @ColumnInfo(name = "desc")
-    val description: String
+    val description: String?
 )

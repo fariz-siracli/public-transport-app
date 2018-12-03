@@ -15,7 +15,7 @@ import com.fs.mobile.tansportcatalog.utils.Constants
 @Database(entities = [Company::class, Type::class, CompanyTypeRelation::class, Phone::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
-    abstract fun getPhonesOfCompany(companyId: Int): PhoneDao
+    abstract fun phoneDao(): PhoneDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null

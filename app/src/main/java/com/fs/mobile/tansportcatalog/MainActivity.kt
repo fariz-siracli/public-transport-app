@@ -113,7 +113,9 @@ class MainActivity : AppCompatActivity() {
 
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
+            val placeholderFragment = PlaceholderFragment.newInstance(position + 1)
+            placeholderFragment.mainActivity = this@MainActivity
+            return placeholderFragment
         }
 
         override fun getCount(): Int {
@@ -127,21 +129,23 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ValidFragment")
     class PlaceholderFragment : Fragment() {
 
+        var mainActivity: MainActivity? = null
 
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
+            savedInstanceState: Bundle?
+        ): View? {
 
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
             var recView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
             recView.layoutManager = LinearLayoutManager(context!!)
-            var companiesAdapter = CompaniesAdapter(listOf(), context!!)
+            var companiesAdapter = CompaniesAdapter(listOf(), mainActivity!!)
             recView.adapter = companiesAdapter
             var page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
                 Utils.log("page = " + page)
-                var companies = database!!.companyDao().getCompanyByType(page )
+                var companies = database!!.companyDao().getCompanyByType(page)
                 companiesAdapter.items = companies
                 getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
 
