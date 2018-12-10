@@ -7,14 +7,15 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
+import com.fs.mobile.tansportcatalog.utils.Utils
 import kotlinx.android.synthetic.main.rv_item_row.view.*
 
 
@@ -28,10 +29,25 @@ class CompaniesAdapter(var items: List<Company>, val activity: MainActivity) : R
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var current = items.get(position)
+        var current = items[position]
         holder?.titleTextview?.text = current.name
         if (current.logo != null)
             holder?.companyLogo.setImageBitmap(BitmapFactory.decodeByteArray(current.logo, 0, current.logo!!.size))
+        else
+            holder?.companyLogo.setImageDrawable(activity.getDrawable(R.drawable.evacuation))
+        if (current.type == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callBtn.setImageDrawable(activity.getDrawable(R.drawable.ic_baseline_android_24px))
+            } else {
+                holder.callBtn.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_baseline_android_24px))
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callBtn.setImageDrawable(activity.getDrawable(R.drawable.ic_baseline_call_24px))
+            } else {
+                holder.callBtn.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_baseline_call_24px))
+            }
+        }
         holder.container.setOnClickListener {
 
             AsyncTask.execute {
@@ -39,37 +55,48 @@ class CompaniesAdapter(var items: List<Company>, val activity: MainActivity) : R
                 val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
                 if (phoneList != null) {
                     activity.runOnUiThread {
-                        Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
+                        //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
 
         holder.callBtn.setOnClickListener {
+            if (current.type == 1) {
+                openApp(current)
+            } else {
 
-            if (ActivityCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.CALL_PHONE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
-
-                } else {
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)
                     ActivityCompat.requestPermissions(
                         activity,
                         arrayOf(Manifest.permission.CALL_PHONE),
                         MY_PERMISSIONS_REQUEST_CALL_PHONE
                     )
+                   Utils.log("permitted")
+                } else {
+
+                    AsyncTask.execute {
+
+                        var phoneNumber = getPhoneNumber(current)
+                        val shortNum = phoneNumber[0].phone
+                        val callIntent = Intent(Intent.ACTION_CALL)
+                        callIntent.data = Uri.parse("tel:$shortNum")
+                        activity.runOnUiThread { activity.startActivity(callIntent) }
+
+                    }
                 }
             }
-            AsyncTask.execute {
-                var phoneNumber = getPhoneNumber(current)
-                val shortNum = phoneNumber[0].phone
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:$shortNum")
-                activity.runOnUiThread { activity.startActivity(callIntent) }
 
-            }
+        }
+    }
+
+    fun openApp(company: Company) {
+        val ty = activity.packageManager.getLaunchIntentForPackage(company.email)
+        if (ty != null)
+            activity.startActivity(ty)
+        else {
+            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${company.email}")))
         }
     }
 

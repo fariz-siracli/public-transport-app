@@ -15,9 +15,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
+import com.crashlytics.android.Crashlytics
 import com.fs.mobile.tansportcatalog.utils.Constants
 import com.fs.mobile.tansportcatalog.utils.Utils
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+
 
 var database: AppDatabase? = null
 var currentPage = 0
@@ -38,6 +42,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        Fabric.with(this, Crashlytics())
+        Fabric.with(
+            Fabric.Builder(this)
+                .kits(Crashlytics())
+                .appIdentifier(BuildConfig.APPLICATION_ID)
+                .build()
+        )
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
@@ -71,14 +82,7 @@ class MainActivity : AppCompatActivity() {
 
 
         Utils.copyDataBaseToApp(this, Constants.DB_NAME)
-        var existence = Utils.checkDatabaseExistence(this, Constants.DB_NAME);
-        Log.i("PUB_TR", "exists = " + existence);
         database = AppDatabase.getAppDataBase(this)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
 
     }
 
@@ -119,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return 4
+            return 5
         }
     }
 
@@ -146,6 +150,7 @@ class MainActivity : AppCompatActivity() {
             AsyncTask.execute {
                 Utils.log("page = " + page)
                 var companies = database!!.companyDao().getCompanyByType(page)
+                Collections.shuffle(companies)
                 companiesAdapter.items = companies
                 getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
 

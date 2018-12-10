@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Католог транспорта</string>
+    <string name="action_settings">Настройки</string>
+    <string name="taxi">Такси</string>
+    <string name="cargo">Грузореревозка</string>
+    <string name="driver">Трезводитель</string>
+    <string name="rent_car">Авто аренда</string>
+    <string name="evacuator">Эвакуатор</string>
+</resources>

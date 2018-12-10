@@ -3,7 +3,9 @@ package com.fs.mobile.tansportcatalog.utils
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import java.io.*
+import java.lang.Exception
 
 class Utils {
 
@@ -54,7 +56,12 @@ class Utils {
         }
 
         fun log(text: String) {
-            Log.i("TRANS_CATALOG", text)
+            try {
+                Crashlytics.log(text)
+                Log.i("TRANS_CATALOG", text)
+            }catch (x : Exception){
+                x.stackTrace
+            }
         }
     }
 

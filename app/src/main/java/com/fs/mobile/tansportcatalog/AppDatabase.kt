@@ -12,7 +12,7 @@ import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.entity.Type
 import com.fs.mobile.tansportcatalog.utils.Constants
 
-@Database(entities = [Company::class, Type::class, CompanyTypeRelation::class, Phone::class], version = 1)
+@Database(entities = [Company::class, Type::class, CompanyTypeRelation::class, Phone::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun companyDao(): CompanyDao
     abstract fun phoneDao(): PhoneDao
@@ -22,9 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun getAppDataBase(context: Context): AppDatabase? {
             if (INSTANCE == null) {
                 synchronized(AppDatabase::class) {
-                    INSTANCE =
-                            Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, Constants.DB_NAME)
-                                .build()
+                    INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, Constants.DB_NAME).build()
                 }
             }
             return INSTANCE
