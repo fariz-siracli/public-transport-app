@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.fs.mobile.tansportcatalog">
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -13,19 +14,25 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".MainActivity"
-                android:label="@string/app_name"
                 android:configChanges="keyboardHidden|orientation|screenSize"
+                android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
+
         <meta-data
                 android:name="io.fabric.ApiKey"
-                android:value="cf7227d403a6fc3d25fa76d4f10885fe9f6a43a2" />
+                android:value="cf7227d403a6fc3d25fa76d4f10885fe9f6a43a2"/>
+
+        <activity
+                android:name=".CompanyInfoActivity"
+                android:label="@string/title_activity_company_info"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -30,13 +30,13 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (items != null && items.size > 0 && position < items.size) {
-            var current = items[position]
-            holder?.titleTextview?.text = current.name
+        if (items.isNotEmpty() && position < items.size) {
+            val current = items[position]
+            holder.titleTextview?.text = current.name
             if (current.logo != null)
-                holder?.companyLogo.setImageBitmap(BitmapFactory.decodeByteArray(current.logo, 0, current.logo!!.size))
+                holder.companyLogo.setImageBitmap(BitmapFactory.decodeByteArray(current.logo, 0, current.logo!!.size))
             else {
-                holder?.companyLogo.setImageDrawable(Utils.getResource(activity, R.drawable.evacuation))
+                holder.companyLogo.setImageDrawable(Utils.getResource(activity, R.drawable.evacuation))
             }
             if (current.type == 1) {
                 holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_android_24px))
@@ -47,12 +47,16 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
 
                 AsyncTask.execute {
                     database = AppDatabase.getAppDataBase(activity)
-                    val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
-                    if (phoneList != null) {
-                        activity.runOnUiThread {
-                            //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
-                        }
-                    }
+//                    val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
+//                    if (true) {
+//                        activity.runOnUiThread {
+//                            //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+
+                    var intent  = Intent(activity, CompanyInfoActivity::class.java)
+                    intent.putExtra("SELECTED_COMPANY", current)
+                 //   activity.startActivity(intent)
                 }
             }
 

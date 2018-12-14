@@ -3,6 +3,7 @@ package com.fs.mobile.tansportcatalog.entity
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "company")
 
@@ -34,7 +35,7 @@ data class Company(
 
     @ColumnInfo(name = "email")
     val email: String?
-) {
+) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
