@@ -1,7 +1,12 @@
 package com.fs.mobile.tansportcatalog.utils
 
-class Constants{
+public class Constants{
     companion object {
         val DB_NAME = "pub_tr.db"
+
+        @JvmField
+        var language: String = "az"
+        @JvmField
+        var SAVED_USER_LANGUAGE: String = "az"
     }
 }

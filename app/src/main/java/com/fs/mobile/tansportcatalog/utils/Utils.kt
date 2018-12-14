@@ -2,10 +2,13 @@ package com.fs.mobile.tansportcatalog.utils
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.preference.PreferenceManager
 import android.util.Log
 import com.crashlytics.android.Crashlytics
+import com.fs.mobile.tansportcatalog.R
 import java.io.*
-import java.lang.Exception
 
 class Utils {
 
@@ -50,6 +53,20 @@ class Utils {
             }
         }
 
+        fun setPreference(context: Context, key: String, value: String) {
+            val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
+            editor.putString(key, value)
+            editor.commit()
+        }
+
+        fun getResource(context: Context, resource:Int): Drawable {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                context.getDrawable(resource)
+            } else {
+                context.resources.getDrawable(resource)
+            }
+        }
+
         fun checkDatabaseExistence(context: Context, fileName: String): Boolean {
             var db = context.getDatabasePath(fileName);
             return db.exists()
@@ -59,7 +76,7 @@ class Utils {
             try {
                 Crashlytics.log(text)
                 Log.i("TRANS_CATALOG", text)
-            }catch (x : Exception){
+            } catch (x: Exception) {
                 x.stackTrace
             }
         }

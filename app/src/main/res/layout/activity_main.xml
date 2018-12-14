@@ -40,8 +40,11 @@
 
             <android.support.design.widget.TabItem
                     android:id="@+id/tabItem2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:tabMode="scrollable"
+                    app:tabGravity="fill"
+
                     android:text="@string/evacuator"/>
 
             <android.support.design.widget.TabItem

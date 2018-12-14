@@ -7,19 +7,20 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.AsyncTask
-import android.os.Build
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils
 import kotlinx.android.synthetic.main.rv_item_row.view.*
 
 
-class CompaniesAdapter(var items: List<Company>, val activity: MainActivity) : RecyclerView.Adapter<ViewHolder>() {
+class CompaniesAdapter(var items: List<Company>, private val activity: MainActivity) :
+    RecyclerView.Adapter<ViewHolder>() {
 
     private val MY_PERMISSIONS_REQUEST_CALL_PHONE: Int = 1
 
@@ -29,69 +30,74 @@ class CompaniesAdapter(var items: List<Company>, val activity: MainActivity) : R
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var current = items[position]
-        holder?.titleTextview?.text = current.name
-        if (current.logo != null)
-            holder?.companyLogo.setImageBitmap(BitmapFactory.decodeByteArray(current.logo, 0, current.logo!!.size))
-        else
-            holder?.companyLogo.setImageDrawable(activity.getDrawable(R.drawable.evacuation))
-        if (current.type == 1) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.callBtn.setImageDrawable(activity.getDrawable(R.drawable.ic_baseline_android_24px))
-            } else {
-                holder.callBtn.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_baseline_android_24px))
+        if (items != null && items.size > 0 && position < items.size) {
+            var current = items[position]
+            holder?.titleTextview?.text = current.name
+            if (current.logo != null)
+                holder?.companyLogo.setImageBitmap(BitmapFactory.decodeByteArray(current.logo, 0, current.logo!!.size))
+            else {
+                holder?.companyLogo.setImageDrawable(Utils.getResource(activity, R.drawable.evacuation))
             }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.callBtn.setImageDrawable(activity.getDrawable(R.drawable.ic_baseline_call_24px))
+            if (current.type == 1) {
+                holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_android_24px))
             } else {
-                holder.callBtn.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_baseline_call_24px))
+                holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_call_24px))
             }
-        }
-        holder.container.setOnClickListener {
+            holder.container.setOnClickListener {
 
-            AsyncTask.execute {
-                database = AppDatabase.getAppDataBase(activity)
-                val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
-                if (phoneList != null) {
-                    activity.runOnUiThread {
-                        //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
+                AsyncTask.execute {
+                    database = AppDatabase.getAppDataBase(activity)
+                    val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
+                    if (phoneList != null) {
+                        activity.runOnUiThread {
+                            //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
-        }
 
-        holder.callBtn.setOnClickListener {
-            if (current.type == 1) {
-                openApp(current)
-            } else {
-
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        arrayOf(Manifest.permission.CALL_PHONE),
-                        MY_PERMISSIONS_REQUEST_CALL_PHONE
-                    )
-                   Utils.log("permitted")
+            holder.callBtn.setOnClickListener {
+                if (current.type == 1) {
+                    openAppView(current)
                 } else {
 
-                    AsyncTask.execute {
+                    if (ActivityCompat.checkSelfPermission(
+                            activity,
+                            Manifest.permission.CALL_PHONE
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)
+                        ActivityCompat.requestPermissions(
+                            activity,
+                            arrayOf(Manifest.permission.CALL_PHONE),
+                            MY_PERMISSIONS_REQUEST_CALL_PHONE
+                        )
+                        Utils.log("permitted")
+                    } else {
 
-                        var phoneNumber = getPhoneNumber(current)
-                        val shortNum = phoneNumber[0].phone
-                        val callIntent = Intent(Intent.ACTION_CALL)
-                        callIntent.data = Uri.parse("tel:$shortNum")
-                        activity.runOnUiThread { activity.startActivity(callIntent) }
+                        AsyncTask.execute {
 
+                            var phoneNumber = getPhoneNumber(current)
+                            if (phoneNumber != null && phoneNumber.isNotEmpty()) {
+                                val shortNum = phoneNumber[0].phone
+                                val callIntent = Intent(Intent.ACTION_CALL)
+                                callIntent.data = Uri.parse("tel:$shortNum")
+                                activity.runOnUiThread { activity.startActivity(callIntent) }
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    activity.getString(R.string.phone_not_found),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
                 }
             }
-
         }
     }
 
-    fun openApp(company: Company) {
+    fun openAppView(company: Company) {
         val ty = activity.packageManager.getLaunchIntentForPackage(company.email)
         if (ty != null)
             activity.startActivity(ty)
@@ -100,7 +106,7 @@ class CompaniesAdapter(var items: List<Company>, val activity: MainActivity) : R
         }
     }
 
-    fun getPhoneNumber(company: Company): List<Phone> {
+    private fun getPhoneNumber(company: Company): List<Phone> {
 
         database = AppDatabase.getAppDataBase(activity)
         return database!!.phoneDao().getPhonesOfCompany(company.id)

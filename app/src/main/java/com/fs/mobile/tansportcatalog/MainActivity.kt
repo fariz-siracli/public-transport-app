@@ -1,10 +1,13 @@
 package com.fs.mobile.tansportcatalog
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.os.Handler
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -13,13 +16,15 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import com.fs.mobile.tansportcatalog.utils.Constants
+import com.fs.mobile.tansportcatalog.utils.MyContextWrapper
 import com.fs.mobile.tansportcatalog.utils.Utils
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.language_view.view.*
 import java.util.*
 
 
@@ -42,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        Fabric.with(this, Crashlytics())
+
         Fabric.with(
             Fabric.Builder(this)
                 .kits(Crashlytics())
@@ -86,10 +91,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    var doubleBackToExitPressedOnce = false
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.press_back), Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        val context = MyContextWrapper.wrap(newBase)
+        super.attachBaseContext(context)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main2, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -100,10 +123,55 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
 
         if (id == R.id.action_settings) {
+            changeLanguageDialog()
             return true
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("InflateParams")
+    fun changeLanguageDialog() {
+        val inflater = layoutInflater
+        val alertLayout = inflater.inflate(R.layout.language_view, null)
+        val alert: AlertDialog.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog_Alert)
+        } else {
+            AlertDialog.Builder(context)
+        }
+        alert.setTitle(R.string.language)
+
+        alert.setView(alertLayout)
+        val rbAz = alertLayout.rb_az
+        rbAz.setText(R.string.az)
+        val rbEn = alertLayout.rb_en
+        rbEn.setText(R.string.eng)
+        val rbRu = alertLayout.rb_ru
+        rbRu.setText(R.string.rus)
+        val defLang = Constants.language
+        when (defLang) {
+            "az" -> rbAz.isChecked = true
+            "ru" -> rbRu.isChecked = true
+            else -> rbEn.isChecked = true
+        }
+        alert.setCancelable(false)
+        alert.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        alert.setPositiveButton(R.string.ok) { _, _ ->
+            val selectedLang = when {
+                rbAz.isChecked -> "az"
+                rbRu.isChecked -> "ru"
+                else -> "en"
+            }
+            if (selectedLang != Constants.language) {
+                Utils.setPreference(this, Constants.SAVED_USER_LANGUAGE, selectedLang)
+                Utils.log("start intent 11")
+                val intent = Intent(context, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                context?.startActivity(intent)
+            }
+        }
+        val dialog = alert.create()
+        dialog.show()
     }
 
 
@@ -148,11 +216,13 @@ class MainActivity : AppCompatActivity() {
             var page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
-                Utils.log("page = " + page)
+
                 var companies = database!!.companyDao().getCompanyByType(page)
-                Collections.shuffle(companies)
-                companiesAdapter.items = companies
-                getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
+                if (companies != null) {
+                    Collections.shuffle(companies)
+                    companiesAdapter.items = companies
+                    getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
+                }
 
             }
 

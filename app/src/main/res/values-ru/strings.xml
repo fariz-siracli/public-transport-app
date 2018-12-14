@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Католог транспорта</string>
+    <string name="app_name">Дорожный католог</string>
     <string name="action_settings">Настройки</string>
     <string name="taxi">Такси</string>
-    <string name="cargo">Грузореревозка</string>
+    <string name="cargo">Грузоперевозка</string>
     <string name="driver">Трезводитель</string>
     <string name="rent_car">Авто аренда</string>
     <string name="evacuator">Эвакуатор</string>
+    <string name="phone_not_found">Произошла ошибка. Пожалуста перезагрузите приложение</string>
+    <string name="press_back">Пожалуйста, нажмите НАЗАД еще раз, чтобы выйти</string>
+
+    <string name="az">Азербайджан</string>
+    <string name="rus">Русский</string>
+    <string name="eng">Английский</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="language">Язык</string>
 </resources>

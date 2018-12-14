@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">Transport Catalog</string>
+    <string name="app_name">Road catalog</string>
     <string name="action_settings">Settings</string>
     <string name="taxi">Taxi</string>
     <string name="cargo">Cargo</string>
     <string name="driver">Driver</string>
     <string name="rent_car">Rent Car</string>
     <string name="evacuator">Evacuator</string>
+    <string name="phone_not_found">Could not find phone number. Please restart app</string>
+    <string name="press_back">Please click BACK again to exit</string>
+
+    <string name="az">Azerbaijan</string>
+    <string name="eng">English</string>
+    <string name="rus">Russian</string>
+    <string name="language">Language</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
 
 </resources>

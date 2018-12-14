@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Nəqliyyat kataloqu</string>
+    <string name="app_name">Yolda qalma</string>
     <string name="action_settings">Ayarlar</string>
     <string name="taxi">Taksi</string>
     <string name="cargo">Yükdaşıma</string>
     <string name="driver">Ayıq sürücü</string>
     <string name="rent_car">Avto icarə</string>
     <string name="evacuator">Evakuator</string>
+    <string name="phone_not_found">Xəta baş verdi. Zəhmət olmasa tətbiqi yenidən başladın.</string>
+    <string name="press_back">Tətbiqdən çıxmaq üçün bir daha tıklayın</string>
+    <string name="az">Azərbaycan</string>
+    <string name="eng">İngilis</string>
+    <string name="rus">Rus</string>
+    <string name="language">Dil</string>
+    <string name="ok">Oldu</string>
+    <string name="cancel">Ləğv et</string>
 </resources>
