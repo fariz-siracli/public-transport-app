@@ -16,13 +16,13 @@ data class Company(
     val name: String,
 
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val logo: ByteArray?,
+    var logo: ByteArray?,
 
     @ColumnInfo(name = "url")
     val url: String?,
 
     @ColumnInfo(name = "rating")
-    val rating: Double?,
+    val rating: Float?,
 
     @ColumnInfo(name = "type")
     val type: Int,
@@ -34,7 +34,14 @@ data class Company(
     val city: Int?,
 
     @ColumnInfo(name = "email")
-    val email: String?
+    val email: String?,
+
+
+    @ColumnInfo(name = "cover_photo")
+    val cover: ByteArray?,
+
+    @ColumnInfo(name = "status")
+    val status: Boolean
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

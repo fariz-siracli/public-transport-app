@@ -3,5 +3,7 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorAccent">#9BC53D</color>
+    <color name="white">#FFFFFF</color>
+    <color name="bone">#DCE2C8</color>
 
 </resources>

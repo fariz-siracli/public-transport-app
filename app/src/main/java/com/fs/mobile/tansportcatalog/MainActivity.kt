@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
     private var context: Context? = null
+    private var doubleBackToExitPressedOnce = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 currentPage = position
-                Utils.log("current = " + position)
 
             }
 
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    var doubleBackToExitPressedOnce = false
+
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
@@ -209,15 +209,15 @@ class MainActivity : AppCompatActivity() {
         ): View? {
 
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            var recView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
+            val recView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
             recView.layoutManager = LinearLayoutManager(context!!)
-            var companiesAdapter = CompaniesAdapter(listOf(), mainActivity!!)
+            val companiesAdapter = CompaniesAdapter(listOf(), mainActivity!!)
             recView.adapter = companiesAdapter
-            var page = arguments!!.getInt(ARG_SECTION_NUMBER)
+            val page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
 
-                var companies = database!!.companyDao().getCompanyByType(page)
+                val companies = database!!.companyDao().getCompanyByType(page)
                 if (companies != null) {
                     Collections.shuffle(companies)
                     companiesAdapter.items = companies

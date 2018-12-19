@@ -30,7 +30,7 @@ class Utils {
             try {
                 myInput = activity.getAssets().open(dbName)
                 myOutput = FileOutputStream(outputFile)
-                // transfer bytes from the inputfile to the outputfile
+
                 var buffer = ByteArray(1024)
                 var length = 0
                 while (myInput.read(buffer).let { length = it; it > 0 }) {
@@ -68,7 +68,7 @@ class Utils {
         }
 
         fun checkDatabaseExistence(context: Context, fileName: String): Boolean {
-            var db = context.getDatabasePath(fileName);
+            val db = context.getDatabasePath(fileName);
             return db.exists()
         }
 
