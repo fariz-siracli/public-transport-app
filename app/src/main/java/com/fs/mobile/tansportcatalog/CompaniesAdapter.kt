@@ -41,22 +41,18 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
             if (current.type == 1) {
                 holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_android_24px))
             } else {
-                holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_call_24px))
+                holder.callBtn.setImageDrawable(Utils.getResource(activity, R.drawable.ic_baseline_call_green))
             }
             holder.container.setOnClickListener {
 
                 AsyncTask.execute {
                     database = AppDatabase.getAppDataBase(activity)
-//                    val phoneList = database!!.phoneDao().getPhonesOfCompany(current.id)
-//                    if (true) {
-//                        activity.runOnUiThread {
-//                            //  Toast.makeText(activity, current.name + " - " + phoneList[0].phone, Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
+
 
                     var intent  = Intent(activity, CompanyInfoActivity::class.java)
+                    current.logo = null
                     intent.putExtra("SELECTED_COMPANY", current)
-                 //   activity.startActivity(intent)
+                     activity.startActivity(intent)
                 }
             }
 
@@ -81,7 +77,7 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
 
                         AsyncTask.execute {
 
-                            var phoneNumber = getPhoneNumber(current)
+                            val phoneNumber = getPhoneNumber(current)
                             if (phoneNumber != null && phoneNumber.isNotEmpty()) {
                                 val shortNum = phoneNumber[0].phone
                                 val callIntent = Intent(Intent.ACTION_CALL)
