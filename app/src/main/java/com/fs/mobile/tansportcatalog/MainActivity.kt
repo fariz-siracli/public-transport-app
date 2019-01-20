@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -19,9 +20,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
-import com.fs.mobile.tansportcatalog.utils.Constants
-import com.fs.mobile.tansportcatalog.utils.MyContextWrapper
-import com.fs.mobile.tansportcatalog.utils.Utils
+import com.fs.mobile.tansportcatalog.utils.*
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_view.view.*
@@ -125,10 +124,24 @@ class MainActivity : AppCompatActivity() {
         if (id == R.id.action_settings) {
             changeLanguageDialog()
             return true
+        }else if (id == R.id.send_email){
+            val s = arrayOf("fariz.siracli@gmail.com")
+            composeEmail(s, getString(R.string.app_name) + " : Feedback")
         }
 
         return super.onOptionsItemSelected(item)
     }
+
+    fun composeEmail(addresses: Array<String>, subject: String) {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:") // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses)
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
 
     @SuppressLint("InflateParams")
     fun changeLanguageDialog() {
@@ -210,6 +223,7 @@ class MainActivity : AppCompatActivity() {
 
             val rootView = inflater.inflate(R.layout.fragment_main, container, false)
             val recView: RecyclerView = rootView.findViewById<RecyclerView>(R.id.rv_items)
+
             recView.layoutManager = LinearLayoutManager(context!!)
             val companiesAdapter = CompaniesAdapter(listOf(), mainActivity!!)
             recView.adapter = companiesAdapter

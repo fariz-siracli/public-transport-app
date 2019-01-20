@@ -7,7 +7,7 @@ import android.arch.persistence.room.ForeignKey
 @Entity(tableName = "company_types", primaryKeys = ["company_id", "type_id"],
     foreignKeys = [
         ForeignKey(entity = Company::class,
-            parentColumns = ["_id"],
+            parentColumns = ["c_id"],
             childColumns = ["company_id"]),
         ForeignKey(entity = Type::class,
             parentColumns = ["_id"],

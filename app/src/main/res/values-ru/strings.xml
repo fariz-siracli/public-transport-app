@@ -17,4 +17,7 @@
     <string name="cancel">Отмена</string>
 
     <string name="language">Язык</string>
+    <string name="select_number_to_call">Выберите номер</string>
+    <string name="send_email">Связатся с нами</string>
+    <string name="get_the_app">Приложение</string>
 </resources>

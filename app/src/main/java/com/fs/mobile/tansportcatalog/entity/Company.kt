@@ -9,7 +9,7 @@ import java.io.Serializable
 
 data class Company(
     @PrimaryKey
-    @ColumnInfo(name = "_id")
+    @ColumnInfo(name = "c_id")
     val id: Int,
 
     @ColumnInfo(name = "name")
@@ -41,7 +41,12 @@ data class Company(
     val cover: ByteArray?,
 
     @ColumnInfo(name = "status")
-    val status: Boolean
+    val status: Boolean,
+
+    @ColumnInfo(name = "address")
+    var address:String?,
+    @ColumnInfo(name = "app_link")
+    var link:String?
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -15,4 +15,7 @@
     <string name="language">Dil</string>
     <string name="ok">Oldu</string>
     <string name="cancel">Ləğv et</string>
+    <string name="select_number_to_call">Nömrə seçin</string>
+    <string name="get_the_app">Tətbiqə keç</string>
+    <string name="send_email">Bizimlə əlaqə</string>
 </resources>

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
@@ -49,10 +50,10 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
                     database = AppDatabase.getAppDataBase(activity)
 
 
-                    var intent  = Intent(activity, CompanyInfoActivity::class.java)
+                    var intent = Intent(activity, CompanyInfoActivity::class.java)
                     current.logo = null
                     intent.putExtra("SELECTED_COMPANY", current)
-                     activity.startActivity(intent)
+                    activity.startActivity(intent)
                 }
             }
 
@@ -95,14 +96,23 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
                 }
             }
         }
+        if (position == items.lastIndex) {
+            val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
+            params.bottomMargin = 30
+            holder.itemView.layoutParams = params
+        } else {
+            val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
+            params.bottomMargin = 0
+            holder.itemView.layoutParams = params
+        }
     }
 
     fun openAppView(company: Company) {
-        val ty = activity.packageManager.getLaunchIntentForPackage(company.email)
+        val ty = activity.packageManager.getLaunchIntentForPackage(company.link!!)
         if (ty != null)
             activity.startActivity(ty)
         else {
-            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${company.email}")))
+            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${company.link}")))
         }
     }
 

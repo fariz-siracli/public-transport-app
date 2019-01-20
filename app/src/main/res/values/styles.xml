@@ -22,5 +22,9 @@
         <item name="android:textSize">14sp</item>
         <item name="textAllCaps">true</item>
     </style>
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
 
 </resources>

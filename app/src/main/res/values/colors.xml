@@ -5,5 +5,7 @@
     <color name="colorAccent">#9BC53D</color>
     <color name="white">#FFFFFF</color>
     <color name="bone">#DCE2C8</color>
+    <color name="back">#FFFAFA</color>
+    <color name="status_bar">#805c5c5c</color>
 
 </resources>
