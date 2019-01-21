@@ -21,6 +21,8 @@ import android.view.*
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import com.fs.mobile.tansportcatalog.utils.*
+import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME
+import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME_FULL_NAME
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_view.view.*
@@ -41,8 +43,9 @@ class MainActivity : AppCompatActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-    private var context: Context? = null
+    var context: Context? = null
     private var doubleBackToExitPressedOnce = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        Constants.DB_NAME_FULL_NAME =   getDatabasePath(DB_NAME).getParent() + "/" +DB_NAME_FULL_NAME
+        Utils.log( Constants.DB_NAME_FULL_NAME)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         context = this
@@ -75,17 +80,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 currentPage = position
-
             }
 
             override fun onPageSelected(position: Int) {
-
             }
-
         })
 
-
-        Utils.copyDataBaseToApp(this, Constants.DB_NAME)
+            // if(!Utils.checkDatabaseExistence(this, Constants.DB_NAME))
+            Utils.copyDataBaseToApp(this, Constants.DB_NAME)
         database = AppDatabase.getAppDataBase(this)
 
     }

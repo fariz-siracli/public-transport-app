@@ -3,6 +3,7 @@ package com.fs.mobile.tansportcatalog.utils
 public class Constants{
     companion object {
         val DB_NAME = "pub_tr.db"
+        var DB_NAME_FULL_NAME = "pub_tr.db"
 
         @JvmField
         var language: String = "az"
