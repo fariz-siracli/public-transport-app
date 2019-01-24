@@ -12,8 +12,8 @@ android {
         applicationId "com.fs.mobile.tansportcatalog"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 15
-        versionName "1.1.7"
+        versionCode 16
+        versionName "1.1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

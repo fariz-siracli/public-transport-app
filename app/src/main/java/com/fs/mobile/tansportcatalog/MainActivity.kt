@@ -20,9 +20,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
-import com.fs.mobile.tansportcatalog.utils.*
+import com.fs.mobile.tansportcatalog.utils.Constants
 import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME
 import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME_FULL_NAME
+import com.fs.mobile.tansportcatalog.utils.MyContextWrapper
+import com.fs.mobile.tansportcatalog.utils.Utils
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_view.view.*
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     private var doubleBackToExitPressedOnce = false
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        Constants.DB_NAME_FULL_NAME =   getDatabasePath(DB_NAME).getParent() + "/" +DB_NAME_FULL_NAME
-        Utils.log( Constants.DB_NAME_FULL_NAME)
+        Constants.DB_NAME_FULL_NAME = getDatabasePath(DB_NAME).getParent() + "/" + DB_NAME_FULL_NAME
+        Utils.log(Constants.DB_NAME_FULL_NAME)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         context = this
@@ -86,8 +87,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-            // if(!Utils.checkDatabaseExistence(this, Constants.DB_NAME))
-            Utils.copyDataBaseToApp(this, Constants.DB_NAME)
+        // if(!Utils.checkDatabaseExistence(this, Constants.DB_NAME))
+        Utils.copyDataBaseToApp(this, Constants.DB_NAME)
         database = AppDatabase.getAppDataBase(this)
 
     }
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         if (id == R.id.action_settings) {
             changeLanguageDialog()
             return true
-        }else if (id == R.id.send_email){
+        } else if (id == R.id.send_email) {
             val s = arrayOf("fariz.siracli@gmail.com")
             composeEmail(s, getString(R.string.app_name) + " : Feedback")
         }
@@ -266,5 +267,11 @@ class MainActivity : AppCompatActivity() {
                 return fragment
             }
         }
+    }
+
+    override fun onDestroy() {
+        if (database != null)
+            database!!.close()
+        super.onDestroy()
     }
 }
