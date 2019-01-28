@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
+import com.fs.mobile.tansportcatalog.db.AppDatabase
 import com.fs.mobile.tansportcatalog.utils.Constants
 import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME
 import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME_FULL_NAME
@@ -88,9 +89,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         // if(!Utils.checkDatabaseExistence(this, Constants.DB_NAME))
-        Utils.copyDataBaseToApp(this, Constants.DB_NAME)
-        database = AppDatabase.getAppDataBase(this)
 
+        database = AppDatabase.getAppDataBase(this)
+        Utils.copyDataBaseOfApp(this, Constants.DB_NAME)
     }
 
 

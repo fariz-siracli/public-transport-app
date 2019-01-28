@@ -12,8 +12,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.Toast
+import com.fs.mobile.tansportcatalog.db.AppDatabase
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils

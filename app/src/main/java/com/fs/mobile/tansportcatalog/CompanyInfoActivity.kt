@@ -15,6 +15,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.fs.mobile.tansportcatalog.db.AppDatabase
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils
