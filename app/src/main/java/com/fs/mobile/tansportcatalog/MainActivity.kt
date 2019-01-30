@@ -20,19 +20,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
-import com.fs.mobile.tansportcatalog.db.AppDatabase
+import com.fs.mobile.tansportcatalog.db.DbHelper
 import com.fs.mobile.tansportcatalog.utils.Constants
-import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME
-import com.fs.mobile.tansportcatalog.utils.Constants.Companion.DB_NAME_FULL_NAME
 import com.fs.mobile.tansportcatalog.utils.MyContextWrapper
 import com.fs.mobile.tansportcatalog.utils.Utils
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_view.view.*
-import java.util.*
 
 
-var database: AppDatabase? = null
 var currentPage = 0
 
 class MainActivity : AppCompatActivity() {
@@ -49,10 +45,8 @@ class MainActivity : AppCompatActivity() {
     var context: Context? = null
     private var doubleBackToExitPressedOnce = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         Fabric.with(
             Fabric.Builder(this)
                 .kits(Crashlytics())
@@ -61,10 +55,13 @@ class MainActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        Constants.DB_NAME_FULL_NAME = getDatabasePath(DB_NAME).getParent() + "/" + DB_NAME_FULL_NAME
-        Utils.log(Constants.DB_NAME_FULL_NAME)
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        var existence = Utils.checkDatabaseExistence(this, Constants.DB_NAME)
+        Utils.log("exists = " + existence)
+        if(!existence){
+            Utils.copyDataBaseToApp(this,Constants.DB_NAME)
+        }
+        existence = Utils.checkDatabaseExistence(this, Constants.DB_NAME)
+        Utils.log("exists = " + existence)
         context = this
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -88,10 +85,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // if(!Utils.checkDatabaseExistence(this, Constants.DB_NAME))
-
-        database = AppDatabase.getAppDataBase(this)
-        Utils.copyDataBaseOfApp(this, Constants.DB_NAME)
     }
 
 
@@ -136,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun composeEmail(addresses: Array<String>, subject: String) {
+    private fun composeEmail(addresses: Array<String>, subject: String) {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:") // only email apps should handle this
         intent.putExtra(Intent.EXTRA_EMAIL, addresses)
@@ -234,13 +227,15 @@ class MainActivity : AppCompatActivity() {
             val page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
-
-                val companies = database!!.companyDao().getCompanyByType(page)
+                val myDatabase = DbHelper(context!!)
+                val companies = myDatabase.getAllCompanies(page)
                 if (companies != null) {
-                    Collections.shuffle(companies)
+                    companies.shuffle()
                     companiesAdapter.items = companies
                     getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
                 }
+
+                myDatabase.close()
 
             }
 
@@ -270,9 +265,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        if (database != null)
-            database!!.close()
-        super.onDestroy()
-    }
 }

@@ -1,25 +1,17 @@
 package com.fs.mobile.tansportcatalog.entity
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 
-
-@Entity(tableName = "phone")
 data class Phone(
-    @PrimaryKey
-    @ColumnInfo(name = "_id")
-    val id: Int,
 
-    @ColumnInfo(name = "company_id")
-    val companyId : Int,
+    var id: Int,
 
-    @ColumnInfo(name = "phone")
-    val phone: String,
+    var companyId: Int,
 
-    @ColumnInfo(name = "phone_type")
-    val type: Int,
+    var phone: String,
 
-    @ColumnInfo(name = "desc")
-    val description: String?
-)
+    var type: Int,
+
+    var description: String?
+) {
+    constructor(id: Int) : this(id, 0, "", 0, "")
+}

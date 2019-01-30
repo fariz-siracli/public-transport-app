@@ -15,7 +15,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.fs.mobile.tansportcatalog.db.AppDatabase
+import com.fs.mobile.tansportcatalog.db.DbHelper
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils
@@ -32,27 +32,16 @@ class CompanyInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_info)
 
-//        val w = window // in Activity's onCreate() for instance
-//        w.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        // window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        // window.setStatusBarColor(getColor(R.color.status_bar));
-
         val selectedCompany = intent.getSerializableExtra("SELECTED_COMPANY") as Company
+        val dbHelper = DbHelper(this)
+        val cover = dbHelper.getCoverPicture(selectedCompany.id)
+        dbHelper.close()
+        selectedCompany.cover = cover
+
         tv_company_name.text = selectedCompany.name
         iv_company.setImageBitmap(BitmapFactory.decodeByteArray(selectedCompany.cover, 0, selectedCompany.cover!!.size))
         if (selectedCompany.rating != null) {
-            // rb_company.visibility = View.VISIBLE
             rb_company.rating = selectedCompany.rating!!
-        } else {
-            //  rb_company.visibility = View.GONE
         }
         if (selectedCompany.address != null) {
             tv_company_address.text = selectedCompany.address
@@ -139,8 +128,6 @@ class CompanyInfoActivity : AppCompatActivity() {
                 )
                 Utils.log("permitted")
             } else {
-
-
                 val phoneArray = arrayOfNulls<String>(phoneList!!.size)
                 var i = 0
 
@@ -149,13 +136,14 @@ class CompanyInfoActivity : AppCompatActivity() {
                 }
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle(R.string.select_number_to_call)
-                builder.setItems(phoneArray) { dialog, which -> call(phoneArray!![which]!!) }
+                builder.setItems(phoneArray) { dialog, which -> call(phoneArray[which]!!) }
                 builder.show()
             }
         }
         AsyncTask.execute {
-            database = AppDatabase.getAppDataBase(this)
-            phoneList = database!!.phoneDao().getPhonesOfCompany(selectedCompany.id)
+            //            database = AppDatabase.getAppDataBase(this)
+//            phoneList = database!!.phoneDao().getPhonesOfCompany(selectedCompany.id)
+            phoneList = dbHelper!!.getPhoneNumbers(selectedCompany.id)
         }
     }
 
@@ -168,13 +156,13 @@ class CompanyInfoActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_CALL)
         intent.data = Uri.parse("tel:$number")
         startActivity(intent)
-
     }
 
     private fun getPhoneNumber(company: Company): List<Phone> {
-
-        database = AppDatabase.getAppDataBase(this)
-        return database!!.phoneDao().getPhonesOfCompany(company.id)
+        val dbHelper = DbHelper(this)
+        var phoneList = dbHelper.getPhoneNumbers(company.id)
+        dbHelper.close()
+        return phoneList
     }
 
     fun openAppView(company: Company) {

@@ -1,53 +1,24 @@
 package com.fs.mobile.tansportcatalog.entity
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.util.Log
 import java.io.Serializable
 
-@Entity(tableName = "company")
 
 data class Company(
-    @PrimaryKey
-    @ColumnInfo(name = "c_id")
-    val id: Int,
-
-    @ColumnInfo(name = "name")
-    val name: String,
-
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    var id: Int,
+    var name: String,
     var logo: ByteArray?,
-
-    @ColumnInfo(name = "url")
-    val url: String?,
-
-    @ColumnInfo(name = "rating")
-    val rating: Float?,
-
-    @ColumnInfo(name = "type")
-    val type: Int,
-
-    @ColumnInfo(name = "sort_order")
+    var url: String?,
+    var rating: Float?,
+    var type: Int,
     val sortOrder: Int,
+    var city: Int?,
+    var email: String?,
+    var cover: ByteArray?,
+    var status: Boolean,
+    var address: String?,
+    var link: String?) : Serializable {
 
-    @ColumnInfo(name = "city")
-    val city: Int?,
-
-    @ColumnInfo(name = "email")
-    val email: String?,
-
-
-    @ColumnInfo(name = "cover_photo")
-    val cover: ByteArray?,
-
-    @ColumnInfo(name = "status")
-    val status: Boolean,
-
-    @ColumnInfo(name = "address")
-    var address:String?,
-    @ColumnInfo(name = "app_link")
-    var link:String?
-) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -57,6 +28,10 @@ data class Company(
         if (id != other.id) return false
 
         return true
+    }
+
+    constructor(id: Int) : this(id, "", null, "", 0.0f, 0, 0, 0, "", null, false, "", "") {
+        Log.d("secondary", "Hello");
     }
 
     override fun hashCode(): Int {

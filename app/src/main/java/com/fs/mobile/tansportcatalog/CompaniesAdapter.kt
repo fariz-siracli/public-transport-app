@@ -13,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.fs.mobile.tansportcatalog.db.AppDatabase
+import com.fs.mobile.tansportcatalog.db.DbHelper
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils
@@ -47,10 +47,7 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
             holder.container.setOnClickListener {
 
                 AsyncTask.execute {
-                    database = AppDatabase.getAppDataBase(activity)
-
-
-                    var intent = Intent(activity, CompanyInfoActivity::class.java)
+                    val intent = Intent(activity, CompanyInfoActivity::class.java)
                     current.logo = null
                     intent.putExtra("SELECTED_COMPANY", current)
                     activity.startActivity(intent)
@@ -85,11 +82,8 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
                                 callIntent.data = Uri.parse("tel:$shortNum")
                                 activity.runOnUiThread { activity.startActivity(callIntent) }
                             } else {
-                                Toast.makeText(
-                                    activity,
-                                    activity.getString(R.string.phone_not_found),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                showMessage()
+
                             }
                         }
                     }
@@ -107,6 +101,13 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
         }
     }
 
+    private fun showMessage() {
+        activity.runOnUiThread {
+            Toast.makeText(activity.applicationContext, activity.getString(R.string.phone_not_found), Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
     fun openAppView(company: Company) {
         val ty = activity.packageManager.getLaunchIntentForPackage(company.link!!)
         if (ty != null)
@@ -117,12 +118,12 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
     }
 
     private fun getPhoneNumber(company: Company): List<Phone> {
-
-        database = AppDatabase.getAppDataBase(activity)
-        return database!!.phoneDao().getPhonesOfCompany(company.id)
+        val dbHelper = DbHelper(activity)
+        var phoneList = dbHelper.getPhoneNumbers(company.id)
+        dbHelper.close()
+        return phoneList
     }
 
-    // Gets the number of animals in the list
     override fun getItemCount(): Int {
         return items.size
     }
@@ -131,7 +132,6 @@ class CompaniesAdapter(var items: List<Company>, private val activity: MainActiv
 }
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    // Holds the TextView that will add each animal to
     var titleTextview = view.tv_item_title;
     var companyLogo = view.iv_profile_image
     var container = view.card_view

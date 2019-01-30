@@ -1,6 +1,5 @@
 package com.fs.mobile.tansportcatalog.utils
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -15,9 +14,9 @@ class Utils {
 
     companion object {
 
-        fun copyDataBaseToApp(activity: Activity, dbName: String) {
-            val outFileName = activity.getDatabasePath(dbName).getPath()
-            val dir = File(activity.getDatabasePath(dbName).getParent())
+        fun copyDataBaseToApp(context: Context, dbName: String) {
+            val outFileName = context.getDatabasePath(dbName).getPath()
+            val dir = File(context.getDatabasePath(dbName).getParent())
             dir.mkdir()
             // Open the empty mainDb as the output stream
             val outputFile = File(outFileName)
@@ -29,7 +28,7 @@ class Utils {
             var myInput: InputStream? = null
             var myOutput: OutputStream? = null
             try {
-                myInput = activity.getAssets().open(dbName)
+                myInput = context.getAssets().open(dbName)
                 myOutput = FileOutputStream(outputFile)
 
                 var buffer = ByteArray(1024)
@@ -82,7 +81,7 @@ class Utils {
             }
         }
 
-        fun copyDataBaseOfApp(activity: Activity, dbName: String) {
+        fun copyDataBaseOfApp(activity: Context, dbName: String) {
 
 
             // Path to the just created empty mainDb

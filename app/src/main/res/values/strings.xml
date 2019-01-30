@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Road catalog</string>
+    <string name="app_name" translatable="false">Yolda qalma</string>
     <string name="action_settings">Settings</string>
     <string name="taxi">Taxi</string>
     <string name="cargo">Cargo</string>

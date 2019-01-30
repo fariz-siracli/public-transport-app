@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Дорожный католог</string>
     <string name="action_settings">Настройки</string>
     <string name="taxi">Такси</string>
     <string name="cargo">Грузоперевозка</string>
     <string name="driver">Трезводитель</string>
     <string name="rent_car">Авто аренда</string>
     <string name="evacuator">Эвакуатор</string>
-    <string name="phone_not_found">Произошла ошибка. Пожалуста перезагрузите приложение</string>
+    <string name="phone_not_found">Номер не найден. Пожалуста перезагрузите приложение</string>
     <string name="press_back">Пожалуйста, нажмите НАЗАД еще раз, чтобы выйти</string>
 
     <string name="az">Азербайджан</string>
