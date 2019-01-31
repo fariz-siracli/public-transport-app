@@ -51,7 +51,6 @@ class DbHelper(val context: Context) : SQLiteOpenHelper(context, Constants.DB_NA
     private fun installOrUpdateIfNecessary() {
         if (installedDatabaseIsOutdated()) {
             context.deleteDatabase(Constants.DB_NAME)
-//            installDatabaseFromAssets()
             Utils.copyDataBaseToApp(context, Constants.DB_NAME)
             writeDatabaseVersionInPreferences()
         }
@@ -73,11 +72,6 @@ class DbHelper(val context: Context) : SQLiteOpenHelper(context, Constants.DB_NA
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Nothing to do
     }
-
-//    companion object {
-//        const val Constants.DB_NAME = Constants.DB_NAME
-//        const val DATABASE_VERSION = 1
-//    }
 
     fun getAllCompanies(companyType: Int): ArrayList<Company> {
 
