@@ -55,15 +55,7 @@ class MainActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        var existence = Utils.checkDatabaseExistence(this, Constants.DB_NAME)
-        Utils.log("exists = " + existence)
-        if(!existence){
-            Utils.copyDataBaseToApp(this,Constants.DB_NAME)
-        }
-        existence = Utils.checkDatabaseExistence(this, Constants.DB_NAME)
-        Utils.log("exists = " + existence)
         context = this
-
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
@@ -232,7 +224,7 @@ class MainActivity : AppCompatActivity() {
                 if (companies != null) {
                     companies.shuffle()
                     companiesAdapter.items = companies
-                    getActivity()!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
+                    activity!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
                 }
 
                 myDatabase.close()
