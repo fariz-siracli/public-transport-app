@@ -1,2 +1,9 @@
-pub_tr.db
+*.db
 fabric.properties
+.idea
+build/
+.gradle/
+**/.gradle/
+output.json
+*.iml
+#.idea/workspace.xml 
