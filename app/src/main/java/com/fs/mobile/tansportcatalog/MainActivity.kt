@@ -221,6 +221,7 @@ class MainActivity : AppCompatActivity() {
             val page = arguments!!.getInt(ARG_SECTION_NUMBER)
 
             AsyncTask.execute {
+                Utils.log("context null = " + (context == null) )
                 val myDatabase = DbHelper(context!!)
                 val companies = myDatabase.getAllCompanies(page)
                 if (companies != null) {
