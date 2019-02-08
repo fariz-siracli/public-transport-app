@@ -19,4 +19,5 @@
     <string name="select_number_to_call">Выберите номер</string>
     <string name="send_email">Связатся с нами</string>
     <string name="get_the_app">Приложение</string>
+    <string name="error">Произошла ошибка.</string>
 </resources>

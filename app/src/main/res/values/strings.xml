@@ -20,5 +20,6 @@
     <string name="select_number_to_call">Select number</string>
     <string name="get_the_app">Get the app</string>
     <string name="send_email">Contact us</string>
+    <string name="error">Something went wrong</string>
 
 </resources>

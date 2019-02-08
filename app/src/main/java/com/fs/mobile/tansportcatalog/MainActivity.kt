@@ -27,10 +27,12 @@ import com.fs.mobile.tansportcatalog.utils.Utils
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.language_view.view.*
+import java.util.*
 
 
 var currentPage = 0
 
+@Suppress("SENSELESS_COMPARISON")
 class MainActivity : AppCompatActivity() {
 
     /**
@@ -222,7 +224,8 @@ class MainActivity : AppCompatActivity() {
                 val myDatabase = DbHelper(context!!)
                 val companies = myDatabase.getAllCompanies(page)
                 if (companies != null) {
-                    companies.shuffle()
+                    Utils.log("companies null = " + (companies == null) )
+                    Collections.shuffle(companies)
                     companiesAdapter.items = companies
                     activity!!.runOnUiThread { companiesAdapter.notifyDataSetChanged() }
                 }

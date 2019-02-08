@@ -15,12 +15,14 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.fs.mobile.tansportcatalog.db.DbHelper
 import com.fs.mobile.tansportcatalog.entity.Company
 import com.fs.mobile.tansportcatalog.entity.Phone
 import com.fs.mobile.tansportcatalog.utils.Utils
 import kotlinx.android.synthetic.main.activity_company_info.*
 import kotlinx.android.synthetic.main.content_company_info.*
+import java.lang.Exception
 
 
 class CompanyInfoActivity : AppCompatActivity() {
@@ -141,8 +143,6 @@ class CompanyInfoActivity : AppCompatActivity() {
             }
         }
         AsyncTask.execute {
-            //            database = AppDatabase.getAppDataBase(this)
-//            phoneList = database!!.phoneDao().getPhonesOfCompany(selectedCompany.id)
             phoneList = dbHelper!!.getPhoneNumbers(selectedCompany.id)
         }
     }
@@ -166,11 +166,17 @@ class CompanyInfoActivity : AppCompatActivity() {
     }
 
     fun openAppView(company: Company) {
-        val ty = packageManager.getLaunchIntentForPackage(company.link!!)
-        if (ty != null)
-            startActivity(ty)
-        else {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${company.link}")))
+        try {
+
+
+            val ty = packageManager.getLaunchIntentForPackage(company.link!!)
+            if (ty != null)
+                startActivity(ty)
+            else {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${company.link}")))
+            }
+        } catch (ex: Exception) {
+            Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show()
         }
     }
 }
