@@ -7,6 +7,6 @@ class Constants {
         var language: String = "az"
         @JvmField
         var SAVED_USER_LANGUAGE: String = "az"
-        val DATABASE_VERSION = 2
+        val DATABASE_VERSION = 3
     }
 }

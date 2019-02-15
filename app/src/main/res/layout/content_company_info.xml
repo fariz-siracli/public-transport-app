@@ -47,13 +47,31 @@
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                <LinearLayout
+                        android:id="@+id/ll_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1"
+                        android:layout_alignParentStart="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="@color/back"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_company_about"
+                            android:padding="5dp"
+                            android:autoLink="web"
+                            android:textColor="#000000"/>
+                </LinearLayout>
 
                 <LinearLayout
                         android:id="@+id/ll_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:weightSum="1"
-                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/ll_about"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:background="@color/back"

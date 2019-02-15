@@ -17,7 +17,9 @@ data class Company(
     var cover: ByteArray?,
     var status: Boolean,
     var address: String?,
-    var link: String?) : Serializable {
+    var link: String?,
+    var about: String?
+) : Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,7 +32,7 @@ data class Company(
         return true
     }
 
-    constructor(id: Int) : this(id, "", null, "", 0.0f, 0, 0, 0, "", null, false, "", "") {
+    constructor(id: Int) : this(id, "", null, "", 0.0f, 0, 0, 0, "", null, false, "", "", "") {
         Log.d("secondary", "Hello");
     }
 

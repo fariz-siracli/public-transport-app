@@ -93,6 +93,7 @@ class DbHelper(val context: Context) : SQLiteOpenHelper(context, Constants.DB_NA
                     val email = cursor.getString(8)
                     val address = cursor.getString(11)
                     val link = cursor.getString(12)
+                    val about = cursor.getString(13)
 
                     val company = Company(id)
                     company.name = name
@@ -103,6 +104,7 @@ class DbHelper(val context: Context) : SQLiteOpenHelper(context, Constants.DB_NA
                     company.address = address
                     company.link = link
                     company.type = type
+                    company.about = about
 
                     allCompanies.add(company)
                 } while (cursor.moveToNext())

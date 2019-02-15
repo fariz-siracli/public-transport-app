@@ -62,15 +62,22 @@ class CompanyInfoActivity : AppCompatActivity() {
             ll_email.visibility = View.GONE
         }
 
+        if (selectedCompany.about != null && !selectedCompany.about.equals("")) {
+            ll_about.visibility = View.VISIBLE
+            tv_company_about.text = selectedCompany.about
+        } else {
+            ll_about.visibility = View.GONE
+        }
+
         toolbar_layout.isTitleEnabled = false
 
 
         AsyncTask.execute {
+            runOnUiThread {
+                val phoneNumbers = getPhoneNumber(selectedCompany)
+                if (phoneNumbers != null && phoneNumbers.isNotEmpty()) {
 
-            val phoneNumbers = getPhoneNumber(selectedCompany)
-            if (phoneNumbers != null && phoneNumbers.isNotEmpty()) {
 
-                runOnUiThread {
                     for (phone in phoneNumbers) {
                         val phoneListRow: LinearLayout =
                             layoutInflater.inflate(R.layout.phone_number_layout, null) as LinearLayout
@@ -97,19 +104,19 @@ class CompanyInfoActivity : AppCompatActivity() {
                         ll_phone_numbers.addView(phoneListRow, lp)
                     }
 
+
                 }
-            }
-            if (selectedCompany.link != null && !selectedCompany.link.equals("")) {
-                ll_app_url.visibility = View.VISIBLE
-                tv_app_url.setOnClickListener { openAppView(selectedCompany) }
-                val content = SpannableString(getString(R.string.get_the_app))
-                content.setSpan(UnderlineSpan(), 0, content.length, 0)
-                tv_app_url.text = content
-            } else {
-                ll_app_url.visibility = View.GONE
-            }
+                if (selectedCompany.link != null && !selectedCompany.link.equals("")) {
+                    ll_app_url.visibility = View.VISIBLE
+                    tv_app_url.setOnClickListener { openAppView(selectedCompany) }
+                    val content = SpannableString(getString(R.string.get_the_app))
+                    content.setSpan(UnderlineSpan(), 0, content.length, 0)
+                    tv_app_url.text = content
+                } else {
+                    ll_app_url.visibility = View.GONE
+                }
 
-
+            }
         }
 
 
